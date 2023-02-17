@@ -1,0 +1,20 @@
+VIEW V_SALARIES (
+  ID,
+  SALARY,
+  START_YEAR,
+  GENDER,
+  REGION,
+  "T-LEVEL"
+) AS
+SELECT ID,
+  SALARY,
+  START_YEAR,
+  GENDER,
+  REGION,
+  "T-LEVEL"
+FROM "SALARIES_ANONYMIZED"
+WITH READ ONLY
+WITH ANONYMIZATION (ALGORITHM 'DIFFERENTIAL_PRIVACY'
+  PARAMETERS '{"data_change_strategy": "qualified"}'
+  COLUMN ID PARAMETERS '{"is_sequence": true}'
+  COLUMN SALARY PARAMETERS '{"is_sensitive":true, "epsilon":0.1, "sensitivity":15000}')

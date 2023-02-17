@@ -1,0 +1,3 @@
+service{
+    "OPENSAP_MD_EMPLOYEES" as "employees";
+}

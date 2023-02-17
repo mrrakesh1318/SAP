@@ -1,0 +1,19 @@
+PROCEDURE "get_master_data"(
+    out ex_emp_exists boolean,
+    out ex_employees "OPENSAP_MD_EMPLOYEES" ,
+    out ex_emp_count int,
+    out ex_business_partners "OPENSAP_MD_BUSINESSPARTNERS",
+    out ex_bp_count int
+)
+LANGUAGE SQLSCRIPT
+SQL SECURITY INVOKER
+    AS
+BEGIN
+    ex_emp_exists  = "masterdata":"employee_exists"('02BD2137-0890-1EEA-A6C2-BB55C19787FB');   
+
+    call "masterdata":"get_employee_data"( ex_employees );
+    ex_emp_count = "masterdata":rowcount;
+
+    call "masterdata":"get_business_partner_data"( ex_business_partners );
+    ex_bp_count = "masterdata":rowcount;
+END

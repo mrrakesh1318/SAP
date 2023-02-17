@@ -1,0 +1,33 @@
+{
+    "dependencies": {
+        "@sap/xsenv": "^1.2.9",
+        "@sap/xsjs": "^6.3.0",
+        "express-basic-auth": "^1.1.6",
+        "hdb": "^0.17.0",
+        "node-schedule": "^1.3.2",
+        "sap-cf-axios": "*"
+    },
+    "description": "my description",
+    "devDependencies": {
+        "@sap/xsjs-test": "^3.0.2",
+        "cross-var": "^1.1.0"
+    },
+    "files": [],
+    "main": "server.js",
+    "name": "XSJS",
+    "scripts": {
+        "start1": "node --max-http-header-size=64000 server.js",
+        "start": "node --inspect --max-http-header-size=64000 server.js",
+        "login:dev": "cf login -a https://api.cf.us10.hana.ondemand.com -o \"Greenskies Clean Energy LLC_greenskies-dev-zae80jcl\" -s \"DEV\"",
+        "login:devNOTWORKING": "cross-var cf login -a https://api.cf.us10.hana.ondemand.com -o \"Greenskies Clean Energy LLC_greenskies-dev-zae80jcl\" -s \"DEV\"",
+        "sync:localAuth": "npm run login:dev && cf default-env GS_APP_SRV",
+        "debug": "node --inspect --max-http-header-size=64000 server.js",
+        "debugTEST": "node --inspect server.js",
+        "debug_listen": "nodemon --inspect --max-http-header-size=64000 ./server.js",
+        "test": "node testrun.js"
+    },
+    "engines": {
+        "node": "14.x"
+    },
+    "version": "1.0.0"
+}

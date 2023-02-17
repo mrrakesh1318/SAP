@@ -1,0 +1,18 @@
+PROCEDURE "build_products_2"(out ex_products table (PRODUCTID nvarchar(10),
+                                CATEGORY nvarchar(20),
+                                PRICE decimal(15,2))
+)
+LANGUAGE SQLSCRIPT
+SQL SECURITY INVOKER
+READS SQL DATA AS
+--DEFAULT SCHEMA
+BEGIN
+    declare lt_products table like :ex_products;
+    lt_products = select PRODUCTID, CATEGORY, PRICE from "OPENSAP_MD_PRODUCTS";
+
+    :ex_products.INSERT(:lt_products);
+    :ex_products.INSERT(('ProductA', 'Software', '1999.99'), 1);
+    :ex_products.INSERT(('ProductB', 'Software', '2999.99'), 2);
+    :ex_products.INSERT(('ProductC', 'Software', '3999.99'), 3);
+   
+END

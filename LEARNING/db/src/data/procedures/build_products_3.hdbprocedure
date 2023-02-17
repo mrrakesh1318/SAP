@@ -1,0 +1,41 @@
+PROCEDURE "build_products_3"(out ex_products table (PRODUCTID nvarchar(10),
+                                CATEGORY nvarchar(20),
+                                PRICE decimal(15,2)),
+                                out ex_pc_productid nvarchar(10)
+)
+LANGUAGE SQLSCRIPT
+SQL SECURITY INVOKER
+READS SQL DATA AS
+--DEFAULT SCHEMA
+BEGIN
+    declare lt_products table like :ex_products;
+    declare lv_index int = 0;
+    declare lv_del_index int array; --array variable
+    declare lv_array_index int = 0; --index for array variable
+        
+    --inserting new records index wise    
+    lt_products = select PRODUCTID, CATEGORY, PRICE from "OPENSAP_MD_PRODUCTS";
+    :ex_products.INSERT(:lt_products);
+    :ex_products.INSERT(('ProductA', 'Software', '1999.99'), 1);
+    :ex_products.INSERT(('ProductB', 'Software', '2999.99'), 2);
+    :ex_products.INSERT(('ProductC', 'Software', '3999.99'), 3);
+    
+    --updating records using index
+    FOR lv_index IN 1..record_count(:ex_products) DO
+        :ex_products.(PRICE).UPDATE((:ex_products.PRICE[lv_index] * 1.25), lv_index);
+    END FOR;
+
+    --deleting records using indexes    
+    FOR lv_index IN 1..record_count(:ex_products) DO
+        IF :ex_products.PRICE[lv_index] <= 2500.00 THEN --if condition
+            lv_array_index = lv_array_index + 1;
+            lv_del_index[lv_array_index] = lv_index;
+        END IF;
+        END FOR;
+        :ex_products.DELETE(:lv_del_index);
+    
+    -- searching inside the temporary table
+    lv_index = :ex_products.SEARCH("CATEGORY", 'PC', 1);  
+    ex_pc_productid = :ex_products.PRODUCTID[lv_index];
+
+END
